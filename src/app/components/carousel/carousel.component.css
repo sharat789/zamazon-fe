@@ -1,0 +1,55 @@
+/* Custom styles for Glide arrows */
+.glide__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  color: white; /* Arrow color */
+  border: none;
+  border-radius: 50%; /* Rounded corners */
+  width: 40px; /* Width */
+  height: 40px; /* Height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1; /* Ensure arrows are above slides */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.glide__arrow:hover {
+  background-color: rgba(0, 0, 0, 0.8); /* Darker background on hover */
+}
+
+.glide__arrow--left {
+  left: 10px; /* Position the previous arrow */
+}
+
+.glide__arrow--right {
+  right: 10px; /* Position the next arrow */
+}
+
+/* Custom styles for Glide bullets */
+.glide__bullets {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.glide__bullet {
+  width: 10px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent bullet */
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.glide__bullet:hover,
+.glide__bullet--active {
+  background-color: white; /* Active or hovered bullet */
+}

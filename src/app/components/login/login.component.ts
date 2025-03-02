@@ -8,6 +8,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -31,19 +32,20 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe(
-        (response: any) => {
-          // Save token to localStorage or sessionStorage
-          sessionStorage.setItem('token', response.token);
-          // Redirect to products page
-          this.router.navigate(['/']);
-          alert('Login Successful');
-        },
-        (error) => {
-          console.error('Login failed', error);
-          alert('Login failed. Please check your credentials.');
-        }
-      );
+      this.authService
+        .login(this.loginForm.value)
+        .pipe(take(1))
+        .subscribe({
+          next: (response: any) => {
+            sessionStorage.setItem('token', response.token);
+            this.router.navigate(['/']);
+            alert('Login Successful');
+          },
+          error: (error) => {
+            console.error('Login failed', error);
+            alert('Login failed. Please check your credentials.');
+          },
+        });
     }
   }
 }

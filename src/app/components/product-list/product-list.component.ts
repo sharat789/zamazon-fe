@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { CarouselComponent } from '../carousel/carousel.component';
 
 @Component({
   selector: 'app-product-list',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css',
 })
@@ -29,6 +31,7 @@ export class ProductListComponent implements OnInit {
   ngOnInit(): void {
     this.fetchProducts();
   }
+  ngAfterViewInit(): void {}
 
   fetchProducts(): void {
     // this.productService.getProducts().subscribe((data) => {

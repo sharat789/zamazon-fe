@@ -2,11 +2,17 @@ import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ProductListComponent } from '../product-list/product-list.component';
+import { CarouselComponent } from '../carousel/carousel.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  imports: [CommonModule, NavbarComponent, ProductListComponent],
+  imports: [
+    CommonModule,
+    NavbarComponent,
+    ProductListComponent,
+    CarouselComponent,
+  ],
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent implements OnInit {

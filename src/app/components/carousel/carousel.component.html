@@ -1,0 +1,37 @@
+<div class="glide">
+  <div class="glide__track" data-glide-el="track">
+    <ul class="glide__slides">
+      <li class="glide__slide" *ngFor="let slide of carouselSlides">
+        <div class="relative overflow-hidden rounded-lg shadow-lg">
+          <img
+            [src]="slide.image"
+            alt="Carousel Image"
+            class="w-full h-64 object-cover"
+          />
+          <div
+            class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+          >
+            <h2 class="text-white text-3xl font-bold">{{ slide.title }}</h2>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!-- Navigation Arrows -->
+  <div class="glide__arrows" data-glide-el="controls">
+    <button class="glide__arrow glide__arrow--left" data-glide-dir="<">
+      &lt;
+    </button>
+    <button class="glide__arrow glide__arrow--right" data-glide-dir=">">
+      &gt;
+    </button>
+  </div>
+  <!-- Pagination Dots -->
+  <div class="glide__bullets" data-glide-el="controls[nav]">
+    <button
+      class="glide__bullet"
+      *ngFor="let slide of carouselSlides; let i = index"
+      [attr.data-glide-dir]="'=' + i"
+    ></button>
+  </div>
+</div>

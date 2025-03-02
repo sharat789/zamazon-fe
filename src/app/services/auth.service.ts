@@ -1,18 +1,20 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
+import { HttpCommonService } from './http-common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  apiUrl = 'http://localhost:3000';
+  private httpService = inject(HttpCommonService);
   constructor(private httpClient: HttpClient) {}
 
   login(credentials: { email: string; password: string }) {
-    return this.httpClient.post(`${this.apiUrl}/users/login`, credentials);
+    return this.httpService.post('/users/login', credentials);
   }
 
   register(credentials: { email: string; password: string; phone: string }) {
-    return this.httpClient.post(`${this.apiUrl}/users/register`, credentials);
+    return this.httpService.post('/users/register', credentials);
   }
 }
