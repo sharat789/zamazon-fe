@@ -34,8 +34,9 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value).subscribe(
         (response: any) => {
           // Save token to localStorage or sessionStorage
-          localStorage.setItem('token', response.token);
+          sessionStorage.setItem('token', response.token);
           // Redirect to products page
+          this.router.navigate(['/']);
           alert('Login Successful');
         },
         (error) => {

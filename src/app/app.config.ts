@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
+import { authGuard } from './guards/auth.guard';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,5 +16,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(),
     importProvidersFrom(ReactiveFormsModule),
+    { provide: 'authGuard', useValue: authGuard },
   ],
 };
