@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ProductListComponent } from '../product-list/product-list.component';
 import { CarouselComponent } from '../carousel/carousel.component';
+import { CategoryListComponent } from '../category-list/category-list.component';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,7 @@ import { CarouselComponent } from '../carousel/carousel.component';
     NavbarComponent,
     ProductListComponent,
     CarouselComponent,
+    CategoryListComponent,
   ],
   styleUrls: ['./home.component.css'],
 })

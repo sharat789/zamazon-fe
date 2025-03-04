@@ -23,6 +23,20 @@ export class ProductService {
     );
   }
 
+  addToCart(product_id: number, qty: number): Observable<ResponseModel> {
+    return this.httpCommon
+      .post<ResponseModel>('/users/cart', {
+        qty,
+        product_id,
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Error adding to cart:', error);
+          return of({ message: 'Error occurred' });
+        })
+      );
+  }
+
   fetchOrderItems(): Observable<ResponseModel> {
     return this.http.get<ResponseModel>(`${environment.apiUrl}/orders`).pipe(
       catchError((error) => {
