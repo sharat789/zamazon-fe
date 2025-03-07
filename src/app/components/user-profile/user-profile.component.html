@@ -1,0 +1,239 @@
+<app-navbar></app-navbar>
+
+<div class="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-3xl mx-auto">
+    <div class="bg-white shadow overflow-hidden rounded-lg">
+      <div class="px-4 py-5 sm:px-6">
+        <h1 class="text-2xl font-semibold text-gray-900">Profile Settings</h1>
+        <p class="mt-1 max-w-2xl text-sm text-gray-500">
+          Update your personal information and address.
+        </p>
+      </div>
+
+      <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
+        <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+          <!-- Loading indicator -->
+          <div *ngIf="loading" class="text-center py-4">
+            <div
+              class="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"
+            ></div>
+            <p class="mt-2 text-gray-600">Loading profile information...</p>
+          </div>
+
+          <!-- Success message -->
+          <div
+            *ngIf="success"
+            class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700"
+          >
+            <p>Profile updated successfully!</p>
+          </div>
+
+          <!-- Error message -->
+          <div
+            *ngIf="error"
+            class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700"
+          >
+            <p>{{ error }}</p>
+          </div>
+
+          <!-- Personal Information -->
+          <div class="mb-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">
+              Personal Information
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <!-- First Name -->
+              <div>
+                <label
+                  for="first_name"
+                  class="block text-sm font-medium text-gray-700"
+                  >First Name</label
+                >
+                <input
+                  type="text"
+                  id="first_name"
+                  formControlName="first_name"
+                  class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2 border"
+                />
+                <div
+                  *ngIf="
+                    profileForm.get('first_name')?.invalid &&
+                    profileForm.get('first_name')?.touched
+                  "
+                  class="text-red-500 text-sm mt-1"
+                >
+                  First name is required.
+                </div>
+              </div>
+
+              <!-- Last Name -->
+              <div>
+                <label
+                  for="last_name"
+                  class="block text-sm font-medium text-gray-700"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  id="last_name"
+                  formControlName="last_name"
+                  class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2 border"
+                />
+                <div
+                  *ngIf="
+                    profileForm.get('last_name')?.invalid &&
+                    profileForm.get('last_name')?.touched
+                  "
+                  class="text-red-500 text-sm mt-1"
+                >
+                  Last name is required.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Address Information -->
+          <div formGroupName="address" class="mb-6">
+            <h2 class="text-lg font-medium text-gray-900 mb-4">
+              Address Information
+            </h2>
+
+            <!-- Address Line 1 -->
+            <div class="mb-4">
+              <label
+                for="address_line1"
+                class="block text-sm font-medium text-gray-700"
+                >Address Line 1</label
+              >
+              <input
+                type="text"
+                id="address_line1"
+                formControlName="address_line1"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2 border"
+              />
+              <div
+                *ngIf="
+                  profileForm.get('address')?.get('address_line1')?.invalid &&
+                  profileForm.get('address')?.get('address_line1')?.touched
+                "
+                class="text-red-500 text-sm mt-1"
+              >
+                Address Line 1 is required.
+              </div>
+            </div>
+
+            <!-- Address Line 2 -->
+            <div class="mb-4">
+              <label
+                for="address_line2"
+                class="block text-sm font-medium text-gray-700"
+                >Address Line 2 (Optional)</label
+              >
+              <input
+                type="text"
+                id="address_line2"
+                formControlName="address_line2"
+                class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2 border"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- City -->
+              <div>
+                <label
+                  for="city"
+                  class="block text-sm font-medium text-gray-700"
+                  >City</label
+                >
+                <input
+                  type="text"
+                  id="city"
+                  formControlName="city"
+                  class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2 border"
+                />
+                <div
+                  *ngIf="
+                    profileForm.get('address')?.get('city')?.invalid &&
+                    profileForm.get('address')?.get('city')?.touched
+                  "
+                  class="text-red-500 text-sm mt-1"
+                >
+                  City is required.
+                </div>
+              </div>
+
+              <!-- Post Code -->
+              <div>
+                <label
+                  for="post_code"
+                  class="block text-sm font-medium text-gray-700"
+                  >Post Code</label
+                >
+                <input
+                  type="text"
+                  id="post_code"
+                  formControlName="post_code"
+                  class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2 border"
+                />
+                <div
+                  *ngIf="
+                    profileForm.get('address')?.get('post_code')?.invalid &&
+                    profileForm.get('address')?.get('post_code')?.touched
+                  "
+                  class="text-red-500 text-sm mt-1"
+                >
+                  <div
+                    *ngIf="profileForm.get('address')?.get('post_code')?.errors?.['required']"
+                  >
+                    Post code is required.
+                  </div>
+                  <div
+                    *ngIf="profileForm.get('address')?.get('post_code')?.errors?.['pattern']"
+                  >
+                    Post code must be a number.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Country -->
+              <div>
+                <label
+                  for="country"
+                  class="block text-sm font-medium text-gray-700"
+                  >Country</label
+                >
+                <input
+                  type="text"
+                  id="country"
+                  formControlName="country"
+                  class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2 border"
+                />
+                <div
+                  *ngIf="
+                    profileForm.get('address')?.get('country')?.invalid &&
+                    profileForm.get('address')?.get('country')?.touched
+                  "
+                  class="text-red-500 text-sm mt-1"
+                >
+                  Country is required.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="flex justify-end">
+            <button
+              type="submit"
+              [disabled]="loading"
+              class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+            >
+              <span *ngIf="loading">Saving...</span>
+              <span *ngIf="!loading">Save Changes</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

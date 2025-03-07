@@ -9,13 +9,10 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class ProductService {
-  constructor(
-    private httpCommon: HttpCommonService,
-    private http: HttpClient
-  ) {}
+  constructor(private httpCommon: HttpCommonService) {}
 
   fetchCartItems(): Observable<ResponseModel> {
-    return this.httpCommon.get<ResponseModel>('cart').pipe(
+    return this.httpCommon.get<ResponseModel>('/cart').pipe(
       catchError((error) => {
         console.error('Error fetching cart items:', error);
         return of({ message: 'Error occurred' });
@@ -38,23 +35,23 @@ export class ProductService {
   }
 
   fetchOrderItems(): Observable<ResponseModel> {
-    return this.http.get<ResponseModel>(`${environment.apiUrl}/orders`).pipe(
-      catchError((error) => {
-        console.error('Error fetching order items:', error);
-        return of({ message: 'Error occurred' });
-      })
-    );
-  }
-
-  fetchCategories(): Observable<ResponseModel> {
-    return this.http
-      .get<ResponseModel>(`${environment.apiUrl}/categories`)
+    return this.httpCommon
+      .get<ResponseModel>(`${environment.apiUrl}/orders`)
       .pipe(
         catchError((error) => {
-          console.error('Error fetching categories:', error);
+          console.error('Error fetching order items:', error);
           return of({ message: 'Error occurred' });
         })
       );
+  }
+
+  fetchCategories(): Observable<ResponseModel> {
+    return this.httpCommon.get<ResponseModel>('/categories').pipe(
+      catchError((error) => {
+        console.error('Error fetching categories:', error);
+        return of({ message: 'Error occurred' });
+      })
+    );
   }
 
   fetchSellerProducts(): Observable<ResponseModel> {
@@ -85,7 +82,7 @@ export class ProductService {
   }
 
   fetchProducts(): Observable<ResponseModel> {
-    return this.http.get<ResponseModel>(`${environment.apiUrl}/products`).pipe(
+    return this.httpCommon.get<ResponseModel>('/products').pipe(
       catchError((error) => {
         console.error('Error fetching products:', error);
         return of({ message: 'Error occurred' });
@@ -94,7 +91,7 @@ export class ProductService {
   }
 
   fetchProduct(id: string): Observable<ResponseModel> {
-    return this.http
+    return this.httpCommon
       .get<ResponseModel>(`${environment.apiUrl}/products/${id}`)
       .pipe(
         catchError((error) => {

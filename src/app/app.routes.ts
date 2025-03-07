@@ -3,10 +3,20 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProductDetailsComponent } from './components/product-detail/product-detail.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'products/:id', component: ProductDetailsComponent },
+  {
+    path: 'products/:id',
+    component: ProductDetailsComponent,
+    canActivate: ['authGuard'],
+  },
+  {
+    path: 'profile',
+    component: UserProfileComponent,
+    canActivate: ['authGuard'],
+  },
   { path: '', component: HomeComponent, canActivate: ['authGuard'] },
 ];
