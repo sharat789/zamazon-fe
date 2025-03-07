@@ -11,29 +11,6 @@ import { environment } from '../../environments/environment';
 export class ProductService {
   constructor(private httpCommon: HttpCommonService) {}
 
-  fetchCartItems(): Observable<ResponseModel> {
-    return this.httpCommon.get<ResponseModel>('/cart').pipe(
-      catchError((error) => {
-        console.error('Error fetching cart items:', error);
-        return of({ message: 'Error occurred' });
-      })
-    );
-  }
-
-  addToCart(product_id: number, qty: number): Observable<ResponseModel> {
-    return this.httpCommon
-      .post<ResponseModel>('/users/cart', {
-        qty,
-        product_id,
-      })
-      .pipe(
-        catchError((error) => {
-          console.error('Error adding to cart:', error);
-          return of({ message: 'Error occurred' });
-        })
-      );
-  }
-
   fetchOrderItems(): Observable<ResponseModel> {
     return this.httpCommon
       .get<ResponseModel>(`${environment.apiUrl}/orders`)
@@ -91,14 +68,12 @@ export class ProductService {
   }
 
   fetchProduct(id: string): Observable<ResponseModel> {
-    return this.httpCommon
-      .get<ResponseModel>(`${environment.apiUrl}/products/${id}`)
-      .pipe(
-        catchError((error) => {
-          console.error(`Error fetching product #${id}:`, error);
-          return of({ message: 'Error occurred' });
-        })
-      );
+    return this.httpCommon.get<ResponseModel>(`/products/${id}`).pipe(
+      catchError((error) => {
+        console.error(`Error fetching product #${id}:`, error);
+        return of({ message: 'Error occurred' });
+      })
+    );
   }
 
   createProduct(input: CreateProductInput): Observable<any> {

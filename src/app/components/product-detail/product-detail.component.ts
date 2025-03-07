@@ -5,6 +5,7 @@ import { ProductService } from '../../services/product.service';
 import { Observable } from 'rxjs';
 import { ResponseModel } from '../../../types';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-product-details',
@@ -19,7 +20,8 @@ export class ProductDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private productService: ProductService
+    private productService: ProductService,
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -49,7 +51,7 @@ export class ProductDetailsComponent implements OnInit {
 
   addToCart(productId: number, quantity: number): void {
     console.log('Added to cart:', this.productid, 'Quantity:', this.quantity);
-    this.productService.addToCart(this.productid, quantity).subscribe(
+    this.cartService.addToCart(this.productid, quantity).subscribe(
       (response) => {
         console.log('Product added to cart:', response);
       },
