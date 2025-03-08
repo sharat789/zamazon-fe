@@ -48,24 +48,21 @@
               </div>
               <div class="mt-2 md:mt-0">
                 <span
-                  [ngClass]="[
-                    'px-3 py-1 rounded-full text-xs font-medium',
-                    getStatusClass(order.status)
-                  ]"
+                  class="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
                 >
-                  {{ order.status }}
+                  {{ order.status || "Pending" }}
                 </span>
                 <span class="ml-2 text-lg font-semibold"
-                  >${{ order.total_price.toFixed(2) }}</span
+                  >${{ order.amount.toFixed(2) }}</span
                 >
               </div>
             </div>
           </div>
 
           <div class="p-6">
-            <div *ngIf="order.order_items && order.order_items.length > 0">
+            <div *ngIf="order.items && order.items.length > 0">
               <div
-                *ngFor="let item of order.order_items"
+                *ngFor="let item of order.items"
                 class="py-4 flex border-b border-gray-100 last:border-b-0"
               >
                 <div *ngIf="item.image_url" class="h-16 w-16 flex-shrink-0">
@@ -81,22 +78,17 @@
                       <p class="text-sm font-medium text-gray-900">
                         {{ item.name }}
                       </p>
-                      <p class="text-sm text-gray-500">
-                        Qty: {{ item.quantity }}
-                      </p>
+                      <p class="text-sm text-gray-500">Qty: {{ item.qty }}</p>
                     </div>
                     <p class="text-sm font-medium text-gray-900">
-                      ${{ (item.price * item.quantity).toFixed(2) }}
+                      ${{ (item.price * item.qty).toFixed(2) }}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div
-              *ngIf="!order.order_items || order.order_items.length === 0"
-              class="py-4"
-            >
+            <div *ngIf="!order.items || order.items.length === 0" class="py-4">
               <a
                 [routerLink]="['/orders', order.id]"
                 class="text-blue-600 hover:underline"

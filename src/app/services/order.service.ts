@@ -48,7 +48,7 @@ export class OrderService {
   }
 
   getOrders(): Observable<ResponseModel> {
-    return this.httpCommon.get<ResponseModel>('/buyer/orders').pipe(
+    return this.httpCommon.get<ResponseModel>('/users/order').pipe(
       catchError((error) => {
         console.error('Error fetching orders:', error);
         return of({
