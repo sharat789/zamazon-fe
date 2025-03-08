@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Observable, BehaviorSubject, map, shareReplay } from 'rxjs';
+import { Observable, BehaviorSubject, map } from 'rxjs';
 import { CartService } from '../../services/cart.service';
+import { OrderService } from '../../services/order.service';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ResponseModel } from '../../../types';
 
@@ -27,37 +28,38 @@ interface CartItem {
   styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
-  // Replace refreshCart with a direct cartItems subject
+  // State management
   private cartItemsSubject = new BehaviorSubject<CartItem[]>([]);
-  private cartResponseSubject = new BehaviorSubject<ResponseModel | null>(null);
   private errorSubject = new BehaviorSubject<string>('');
+  private isProcessingSubject = new BehaviorSubject<boolean>(false);
 
   // Expose observables
   cartItems$ = this.cartItemsSubject.asObservable();
-  cart$ = this.cartResponseSubject.asObservable();
   error$ = this.errorSubject.asObservable();
+  isProcessing$ = this.isProcessingSubject.asObservable();
 
+  // Calculate total price
   total$: Observable<number> = this.cartItems$.pipe(
     map((items) => items.reduce((sum, item) => sum + item.price * item.qty, 0))
   );
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private orderService: OrderService
+  ) {}
 
   ngOnInit(): void {
-    // Initial data load
     this.loadCartData();
   }
 
   loadCartData(): void {
     this.cartService.fetchCartItems().subscribe({
       next: (response) => {
-        this.cartResponseSubject.next(response);
         this.cartItemsSubject.next(response.data || []);
-        this.errorSubject.next(
-          response.message === 'Error occurred'
-            ? 'Failed to load cart items'
-            : ''
-        );
+
+        if (response.message === 'Error occurred') {
+          this.errorSubject.next('Failed to load cart items');
+        }
       },
       error: (err) => {
         console.error('Error fetching cart:', err);
@@ -80,50 +82,58 @@ export class CartComponent implements OnInit {
         : cartItem
     );
 
-    // Update UI immediately
     this.cartItemsSubject.next(updatedItems);
 
-    // Then send request to backend
+    // Update in the backend
     this.cartService.updateCartItem(item.product_id, newQty).subscribe({
-      next: () => {
-        // No need to refresh data on success as we've already updated the UI
-      },
       error: (err) => {
         console.error('Error updating quantity:', err);
-        // Revert to original list on error
-        this.cartItemsSubject.next(currentItems);
+        this.cartItemsSubject.next(currentItems); // Revert on error
         this.errorSubject.next('Failed to update quantity');
       },
     });
   }
 
   removeItem(productId: number): void {
-    // Optimistically update the UI
     const currentItems = this.cartItemsSubject.value;
-    const updatedItems = currentItems.filter(
-      (item) => item.product_id !== productId
+    this.cartItemsSubject.next(
+      currentItems.filter((item) => item.product_id !== productId)
     );
 
-    // Update UI immediately
-    this.cartItemsSubject.next(updatedItems);
-
-    // Then send request to backend
     this.cartService.removeCartItem(productId).subscribe({
-      next: () => {
-        // No need to refresh data on success as we've already updated the UI
-      },
       error: (err) => {
         console.error('Error removing item:', err);
-        // Revert to original list on error
-        this.cartItemsSubject.next(currentItems);
+        this.cartItemsSubject.next(currentItems); // Revert on error
         this.errorSubject.next('Failed to remove item');
       },
     });
   }
 
-  placeOrder(): void {
-    // Navigate to order page (to be implemented later)
-    console.log('Place order clicked');
+  checkout(): void {
+    if (this.cartItemsSubject.value.length === 0) {
+      this.errorSubject.next('Your cart is empty');
+      return;
+    }
+
+    this.isProcessingSubject.next(true);
+
+    this.orderService.createCheckoutSession().subscribe({
+      next: (response) => {
+        this.isProcessingSubject.next(false);
+
+        if (response && response.checkout_url) {
+          // Direct redirect to Stripe hosted checkout
+          window.location.href = response.checkout_url;
+        } else {
+          this.errorSubject.next('Failed to create checkout session');
+        }
+      },
+      error: (err) => {
+        console.error('Error creating checkout session:', err);
+        this.isProcessingSubject.next(false);
+        this.errorSubject.next('Failed to create checkout session');
+      },
+    });
   }
 
   trackByItemId(index: number, item: CartItem): number {

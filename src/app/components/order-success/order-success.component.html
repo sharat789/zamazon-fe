@@ -1,1 +1,87 @@
-<p>order-success works!</p>
+<app-navbar></app-navbar>
+
+<div class="container mx-auto p-8">
+  <div class="max-w-lg mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <ng-container *ngIf="loading$ | async; else content">
+      <div class="p-8 text-center">
+        <div
+          class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"
+        ></div>
+        <p class="mt-4 text-gray-600">Verifying your payment...</p>
+      </div>
+    </ng-container>
+
+    <ng-template #content>
+      <ng-container *ngIf="error$ | async as error; else success">
+        <div class="p-8 text-center">
+          <div class="text-red-500 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-16 w-16 mx-auto"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+          </div>
+          <h1 class="text-2xl font-bold mb-4">Payment Verification Failed</h1>
+          <p class="text-gray-600 mb-6">{{ error }}</p>
+          <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <button
+              (click)="continueShopping()"
+              class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+            >
+              Return to Shop
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #success>
+        <div class="p-8 text-center">
+          <div class="text-green-500 mb-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-16 w-16 mx-auto"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+          <h1 class="text-2xl font-bold mb-4">Order Placed Successfully!</h1>
+          <p class="text-gray-600 mb-2">Thank you for your purchase.</p>
+          <p *ngIf="orderId$ | async as orderId" class="text-gray-600 mb-6">
+            Your order #{{ orderId }} has been confirmed.
+          </p>
+          <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <button
+              (click)="viewOrders()"
+              class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+            >
+              View My Orders
+            </button>
+            <button
+              (click)="continueShopping()"
+              class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+            >
+              Continue Shopping
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

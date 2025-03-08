@@ -53,4 +53,13 @@ export class CartService {
         })
       );
   }
+
+  clearCart(): Observable<ResponseModel> {
+    return this.httpCommon.delete<ResponseModel>('/users/cart').pipe(
+      catchError((error) => {
+        console.error('Error clearing cart:', error);
+        return of({ message: 'Error occurred' });
+      })
+    );
+  }
 }
