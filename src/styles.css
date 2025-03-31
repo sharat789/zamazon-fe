@@ -1,2 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.blue-link {
+  color: blue;
+  text-decoration: underline;
+}

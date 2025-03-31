@@ -1,70 +1,51 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  AfterViewInit,
-  OnChanges,
-  SimpleChanges,
-  Input,
-} from '@angular/core';
-import Glide from '@glidejs/glide';
+import { Component, Input, OnInit } from '@angular/core';
+import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-carousel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NgbCarouselModule, RouterModule],
   templateUrl: './carousel.component.html',
   styleUrl: './carousel.component.css',
 })
-export class CarouselComponent implements AfterViewInit, OnChanges {
-  @Input() carouselSlides: any[] = [
+export class CarouselComponent implements OnInit {
+  // Better sized images for e-commerce banners
+  images = [
+    'https://images.unsplash.com/photo-1607082352121-fa243f3dde32?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=1200&h=500',
+    'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=1200&h=500',
+    'https://images.unsplash.com/photo-1607083206968-13611e3d76db?ixlib=rb-4.0.3&auto=format&fit=crop&q=80&w=1200&h=500',
+  ];
+
+  // Promotional messages that can be customized
+  slides = [
     {
-      image: 'https://picsum.photos/1200/680', // Valid URL
-      title: 'Featured Products',
-    },
-    {
-      image: '/public/179-1200x400.jpg', // Valid URL
       title: 'New Arrivals',
+      description: 'Check out our latest products and collections',
+      buttonText: 'Shop New Arrivals',
+      link: '/products',
     },
     {
-      image: '/public/179-1200x400.jpg', // Valid URL
-      title: 'Best Sellers',
+      title: 'Summer Sale',
+      description: 'Up to 50% off on selected items',
+      buttonText: 'View Deals',
+      link: '/products',
+    },
+    {
+      title: 'Free Shipping',
+      description: 'On all orders over $50',
+      buttonText: 'Learn More',
+      link: '/products',
     },
   ];
 
-  private glide: Glide | null = null;
+  // Carousel options
+  showNavigationArrows = true;
+  showNavigationIndicators = true;
+  pauseOnHover = true;
 
-  ngAfterViewInit(): void {
-    this.initializeGlide();
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['carouselSlides']) {
-      this.reinitializeGlide();
-    }
-  }
-
-  private initializeGlide(): void {
-    this.glide = new Glide('.glide', {
-      type: 'carousel',
-      perView: 1,
-      autoplay: 5000,
-      hoverpause: true,
-    });
-
-    try {
-      this.glide.mount();
-    } catch (error) {
-      console.error('Error mounting Glide:', error);
-    }
-  }
-
-  private reinitializeGlide(): void {
-    if (this.glide) {
-      this.glide.destroy();
-    }
-
-    setTimeout(() => {
-      this.initializeGlide();
-    }, 100);
+  ngOnInit() {
+    // Any initialization logic
   }
 }
